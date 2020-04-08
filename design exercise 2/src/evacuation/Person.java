@@ -58,19 +58,14 @@ public class Person {
 	}
 
 	public void setAll(String[] array) {
-		firstName = array[0];
-		lastName = array[1];
+		setFirstName(array[0]);
+		setLastName(array[1]);
 		streetNum = array[2];
 		city = array[3];
 		state = array[4];
 		country = array[5];
 		zipCode = array[6];
 		additionalInfo = array[7];
-		name = firstName + " " + lastName;
-	}
-
-	public void setName(String s) {
-		name = s;
 	}
 
 	public void setFirstName(String s) {

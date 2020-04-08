@@ -1,7 +1,5 @@
 package evacuation;
 
-import java.util.TreeMap;
-
 public class Main {
 
 	public static void main(String[] args) throws Exception {
@@ -26,38 +24,36 @@ public class Main {
 			p[i].setAll(array[i]);
 			p[i + 4].setAll(array[i]);
 		}
-		TreeMap<String, String> tree = new TreeMap<String, String>();
 		e.addPerson(p[1]);
-		for (int i = 0; i < 1000000; i++)
-			tree.put(i + "", "a");
+		Thread.sleep(10);
 		e.addPerson(p[3]);
-		for (int i = 0; i < 1000000; i++)
-			tree.put(i + "", "a");
+		Thread.sleep(10);
 		e.addPerson(p[0]);
-		for (int i = 0; i < 1000000; i++)
-			tree.put(i + "", "a");
+		Thread.sleep(10);
 		e.addPerson(p[2]);
-		for (int i = 0; i < 1000000; i++)
-			tree.put(i + "", "a");
+		Thread.sleep(10);
 		e.addPerson(p[7]);
-		for (int i = 0; i < 1000000; i++)
-			tree.put(i + "", "a");
+		Thread.sleep(10);
 		e.addPerson(p[6]);
-		for (int i = 0; i < 1000000; i++)
-			tree.put(i + "", "a");
+		Thread.sleep(10);
 		e.addPerson(p[4]);
-		for (int i = 0; i < 1000000; i++)
-			tree.put(i + "", "a");
+		Thread.sleep(10);
 		e.addPerson(p[5]);
+		String[] s = {"N/A","3","q","q","q","q","q","q"};
+		e.changeInfo(p[0], s);
 		e.getFile("ex");
+		e.clearAll();
+		System.out.print(e.size());
 		e.readFile("ex");
 		e.removeNextPerson();
-		e.removeNextPerson();
 		e.getFile("ex2");
-		e.removeNextPerson();
-		e.removeNextPerson();
-		e.removeNextPerson();
+		e.changeInfo(e.search("16 17").get(0),s);
 		e.getFile("ex3");
+		e.removeNextPerson();
+		e.getFile("ex4");
+		e.removeNextPerson();
+		e.removeNextPerson();
+		e.removeNextPerson();
+		e.getFile("ex5");
 	}
-
 }

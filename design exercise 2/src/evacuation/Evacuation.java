@@ -5,69 +5,94 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Evacuation {
-	private Queue<Person> queue;
+public class Evacuation implements FileOfPeople {
+	private List<Person> people;
 	private Map<String, List<Person>> map;
 
 	public Evacuation() {
-		queue = new LinkedList<Person>();
+		people = new LinkedList<Person>();
 		map = new TreeMap<String, List<Person>>();
 	}
 
-	public void addPerson(Person p) throws InterruptedException {
+	public void addPerson(Person p) {
 		if (p.getDate().equals("N/A"))
 			p.setDate(LocalDateTime.now().toString());
-		queue.add(p);
+		people.add(p);
 		if (!map.containsKey(p.getName()))
 			map.put(p.getName(), new LinkedList<Person>());
 		map.get(p.getName()).add(p);
 	}
 
-	public String getNextPerson() {
-		return queue.peek().toString();
+	public List<Person> getPeople(int n) throws Exception {
+		return people.subList(0, n);
 	}
 
-	public void removeNextPerson() {
-		Person p = queue.remove();
+	public int size() {
+		return people.size();
+	}
+
+	public Person getNextPerson() {
+		return people.get(0);
+	}
+
+	public void removeNextPerson() throws Exception {
+		Person p = people.remove(0);
 		List<Person> list = map.get(p.getName());
 		list.remove(p);
 		if (list.size() == 0)
 			map.remove(p.getName());
 	}
 
+	// arr[0]=firstName [1]=lastName [2]=streetNum [3]=city [4]=state [5]=country
+	// [6]=zipCode [7]=additionalInfo
+	public void changeInfo(Person p, String[] arr) {
+		boolean nameNotChanged = p.getFirstName().contentEquals(arr[0]) && p.getLastName().contentEquals(arr[1]);
+		if (!nameNotChanged) {
+			List<Person> list = map.get(p.getName());
+			list.remove(p);
+			if (list.size() == 0)
+				map.remove(p.getName());
+			p.setAll(arr);
+			if (!map.containsKey(p.getName()))
+				map.put(p.getName(), new LinkedList<Person>());
+			map.get(p.getName()).add(p);
+		} else {
+			p.setAll(arr);
+		}
+	}
+
+	public List<Person> search(String s) {
+		return map.get(s);
+	}
+
 	public void readFile(String fileName) throws Exception {
-		queue = new LinkedList<Person>();
+		people = new LinkedList<Person>();
 		map = new TreeMap<String, List<Person>>();
 		File myObj = new File(fileName + ".txt");
 		Scanner scan = new Scanner(myObj);
-		Map<LocalDateTime, Person> map = new TreeMap<LocalDateTime, Person>();
 		String s;
+		Map<LocalDateTime, Person> map = new TreeMap<LocalDateTime, Person>();
 		while (scan.hasNext()) {
 			Person p = new Person();
-			scan.next();
-			scan.next();
-			p.setFirstName(scan.nextLine().substring(1));
-			scan.next();
-			scan.next();
-			p.setLastName(scan.nextLine().substring(1));
-			scan.next();
-			scan.next();
-			p.setStreetNum(scan.nextLine().substring(1));
-			scan.next();
-			p.setCity(scan.nextLine().substring(1));
-			scan.next();
-			p.setState(scan.nextLine().substring(1));
-			scan.next();
-			p.setCountry(scan.nextLine().substring(1));
-			scan.next();
-			scan.next();
-			p.setZipCode(scan.nextLine().substring(1));
-			scan.next();
-			scan.next();
-			p.setAdditionalInfo(scan.nextLine().substring(1));
-			scan.next();
-			scan.next();
-			p.setDate(scan.nextLine().substring(1));
+			s = scan.nextLine();
+			p.setFirstName(s.substring(s.indexOf(":") + 1).trim());
+			s = scan.nextLine();
+			p.setLastName(s.substring(s.indexOf(":") + 1).trim());
+			s = scan.nextLine();
+			p.setStreetNum(s.substring(s.indexOf(":") + 1).trim());
+			s = scan.nextLine();
+			p.setCity(s.substring(s.indexOf(":") + 1).trim());
+			s = scan.nextLine();
+			p.setState(s.substring(s.indexOf(":") + 1).trim());
+			s = scan.nextLine();
+			p.setCountry(s.substring(s.indexOf(":") + 1).trim());
+			s = scan.nextLine();
+			p.setZipCode(s.substring(s.indexOf(":") + 1).trim());
+			s = scan.nextLine();
+			p.setAdditionalInfo(s.substring(s.indexOf(":") + 1).trim());
+			s = scan.nextLine();
+			scan.nextLine();
+			p.setDate(s.substring(s.indexOf(":") + 1).trim());
 			LocalDateTime time = LocalDateTime.parse(p.getDate());
 			map.put(time, p);
 		}
@@ -88,5 +113,10 @@ public class Evacuation {
 			}
 		}
 		myWriter.close();
+	}
+	
+	public void clearAll() {
+		people = new LinkedList<Person>();
+		map = new TreeMap<String, List<Person>>();
 	}
 }
